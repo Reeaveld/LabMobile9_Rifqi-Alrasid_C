@@ -1,0 +1,7 @@
+{
+  "name": "todonosql",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
