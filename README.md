@@ -1,6 +1,70 @@
 # LabMobile9_Rifqi-Alrasid_C
 tugas ke-9 dan ke-10
 
+# Autentikasi Login dengan Google
+Langkah-Langkah:
+Konfigurasi Firebase:
+
+Buat proyek di Firebase Console dan aktifkan Google Authentication pada menu Authentication > Sign-in Methods.
+Salin Client ID dari menu Google API Console.
+Inisialisasi Firebase:
+
+Tambahkan konfigurasi Firebase di file firebase.ts:
+typescript
+Copy code
+import { initializeApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+
+const firebaseConfig = {
+    apiKey: "your_api_key",
+    authDomain: "your_auth_domain",
+    projectId: "your_project_id",
+    storageBucket: "your_storage_bucket",
+    messagingSenderId: "your_sender_id",
+    appId: "your_app_id"
+};
+
+const firebase = initializeApp(firebaseConfig);
+const auth = getAuth(firebase);
+const googleProvider = new GoogleAuthProvider();
+
+export { auth, googleProvider };
+Implementasi Login:
+
+Gunakan package @codetrix-studio/capacitor-google-auth untuk mengintegrasikan autentikasi Google.
+Tambahkan fungsi login pada file auth.ts:
+typescript
+Copy code
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import { signInWithCredential, GoogleAuthProvider } from 'firebase/auth';
+
+const loginWithGoogle = async () => {
+    await GoogleAuth.initialize({
+        clientId: 'your_client_id',
+        scopes: ['profile', 'email'],
+        grantOfflineAccess: true,
+    });
+
+    const googleUser = await GoogleAuth.signIn();
+    const idToken = googleUser.authentication.idToken;
+
+    const credential = GoogleAuthProvider.credential(idToken);
+    const result = await signInWithCredential(auth, credential);
+
+    console.log('Logged in as:', result.user);
+};
+Logout:
+
+typescript
+Copy code
+const logout = async () => {
+    await signOut(auth);
+    await GoogleAuth.signOut();
+};
+Menampilkan Profil Pengguna:
+
+Informasi pengguna seperti displayName, email, dan photoURL dapat diakses melalui objek user yang diperoleh setelah login.
+
 # SCREENSHOT APLIKASI
 ![Screenshot 2024-11-26 234344](https://github.com/user-attachments/assets/6890df72-c54c-41e3-97c0-1dd2eb8e6a1b)
 ![Screenshot 2024-11-26 234108](https://github.com/user-attachments/assets/c04fbfcf-014b-4d62-9187-278c7116b515)
